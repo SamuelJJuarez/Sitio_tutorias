@@ -14,8 +14,6 @@ body {
   background-color: #f8f9fa; /* Fondo gris claro por defecto para dashboards */
 }
 
-/* --- CLASES PERSONALIZADAS (Como en tu proyecto anterior) --- */
-
 /* Fondo completo para el Login */
 .bg-tec-full {
   background-color: var(--primary-color) !important;
