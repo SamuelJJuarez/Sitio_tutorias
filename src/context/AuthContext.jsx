@@ -36,13 +36,13 @@ export const AuthProvider = ({ children }) => {
       // Selección del endpoint según el tipo de usuario (basado en tus rutas de Express)
       switch (tipoUsuario) {
         case 'alumno':
-          endpoint = '/alumno/login'; //
+          endpoint = '/alumnos/login'; //
           break;
         case 'maestro':
-          endpoint = '/maestro/login'; //
+          endpoint = '/maestros/login'; //
           break;
         case 'admin':
-          endpoint = '/administrativo/login'; //
+          endpoint = '/administrativos/login'; //
           break;
         default:
           throw new Error('Tipo de usuario no válido');

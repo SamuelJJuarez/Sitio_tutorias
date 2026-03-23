@@ -1,0 +1,186 @@
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
+import { cuestionarioService } from '../../services/cuestionarioService';
+import logo from '../../assets/itl_leon.png'; // Tu logo
+
+const CuestionarioPage = () => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  // Estados
+  const [loading, setLoading] = useState(true);
+  const [secciones, setSecciones] = useState([]);
+  const [indiceSeccionActual, setIndiceSeccionActual] = useState(0);
+  const [preguntas, setPreguntas] = useState([]);
+  const [opciones, setOpciones] = useState([]);
+  const [respuestasUsuario, setRespuestasUsuario] = useState({}); // { idPregunta: indiceOpcion }
+
+  // 1. Al cargar, checamos el estatus
+  useEffect(() => {
+    const initCuestionario = async () => {
+      try {
+        const res = await cuestionarioService.getEstatus();
+        if (res.success) {
+          const { totalSecciones, completadas } = res.data;
+          setSecciones(totalSecciones);
+
+          // Calculamos en qué sección debe ir (La primera que NO esté en completadas)
+          const siguienteIndice = totalSecciones.findIndex(sec => !completadas.includes(sec.id_seccion));
+          
+          if (siguienteIndice === -1 && totalSecciones.length > 0) {
+            // Ya acabó todo
+            alert("Ya has completado todo el cuestionario.");
+            navigate('/alumno/dashboard');
+          } else {
+            setIndiceSeccionActual(siguienteIndice);
+          }
+        }
+      } catch (error) {
+        console.error("Error iniciando", error);
+      }
+    };
+    initCuestionario();
+  }, [user, navigate]);
+
+  // 2. Cada vez que cambie el índice de sección, cargamos sus preguntas
+  useEffect(() => {
+    if (secciones.length > 0 && secciones[indiceSeccionActual]) {
+      const cargarSeccion = async () => {
+        setLoading(true);
+        setRespuestasUsuario({}); // Limpiamos respuestas anteriores para evitar basura
+        const idSeccion = secciones[indiceSeccionActual].id_seccion;
+        
+        const res = await cuestionarioService.getSeccion(idSeccion);
+        if (res.success) {
+            setPreguntas(res.data.preguntas);
+            setOpciones(res.data.opciones);
+        }
+        setLoading(false);
+      };
+      cargarSeccion();
+    }
+  }, [indiceSeccionActual, secciones]);
+
+  // Manejar selección de opción
+  const handleOptionSelect = (idPregunta, indexOpcion) => {
+    setRespuestasUsuario(prev => ({
+        ...prev,
+        [idPregunta]: indexOpcion
+    }));
+  };
+
+  // Verificar si todas las preguntas tienen respuesta
+  const validarAvance = () => {
+    // Revisamos si el número de respuestas guardadas coincide con el número de preguntas
+    if (preguntas.length === 0) return false;
+    return Object.keys(respuestasUsuario).length === preguntas.length;
+  };
+
+  // Enviar sección y pasar a la siguiente
+  const handleSiguiente = async () => {
+    if (!validarAvance()) return;
+
+    try {
+        // Convertimos el objeto de respuestas a un array de índices solo values
+        const indices = Object.values(respuestasUsuario);
+
+        await cuestionarioService.saveSeccion({
+            id_seccion: secciones[indiceSeccionActual].id_seccion,
+            respuestasIndices: indices,
+            totalOpciones: opciones.length
+        });
+
+        // Avanzar
+        if (indiceSeccionActual < secciones.length - 1) {
+            setIndiceSeccionActual(prev => prev + 1);
+            window.scrollTo(0, 0); // Subir scroll
+        } else {
+            // Era la última
+            alert("¡Cuestionario finalizado con éxito!");
+            navigate('/alumno/dashboard');
+        }
+
+    } catch (error) {
+        alert("Error al guardar respuestas");
+    }
+  };
+
+  if (loading) return <div className="text-white text-center mt-5">Cargando cuestionario...</div>;
+
+  const seccionActualData = secciones[indiceSeccionActual];
+
+  return (
+    <div className="bg-tec-full min-vh-100 py-4"> {/* Fondo Azul Institucional */}
+      <div className="container">
+        
+        {/* Encabezado Estilo PDF */}
+        <div className="card shadow mb-4">
+            <div className="card-body d-flex justify-content-between align-items-center">
+                <div className="d-flex align-items-center">
+                    <img src={logo} alt="ITL" style={{ height: '50px' }} />
+                    <div className="ms-3 lh-1">
+                        <h5 className="mb-0 fw-bold text-tec">INSTITUTO TECNOLÓGICO DE LEÓN</h5>
+                        <small className="text-muted">Sistema de Tutorías</small>
+                    </div>
+                </div>
+                <div className="text-end">
+                    <h5 className="fw-bold mb-0">Sección {indiceSeccionActual + 1}</h5>
+                    <small className="text-muted">{seccionActualData?.nom_seccion}</small>
+                </div>
+            </div>
+        </div>
+
+        {/* Lista de Preguntas */}
+        <div className="card shadow">
+            <div className="card-body p-5">
+                {preguntas.map((preg, index) => (
+                    <div key={preg.id_pregunta} className="mb-5 border-bottom pb-4">
+                        <h5 className="fw-bold mb-3">{index + 1}. {preg.pregunta}</h5>
+                        
+                        <div className="d-flex flex-column gap-2">
+                            {opciones.map((op, idx) => (
+                                <div key={op.id_opcion} className="form-check p-2 rounded hover-bg-light">
+                                    <input 
+                                        className="form-check-input" 
+                                        type="radio" 
+                                        name={`preg_${preg.id_pregunta}`} 
+                                        id={`opt_${preg.id_pregunta}_${idx}`}
+                                        onChange={() => handleOptionSelect(preg.id_pregunta, idx)}
+                                        checked={respuestasUsuario[preg.id_pregunta] === idx}
+                                    />
+                                    <label className="form-check-label w-100 cursor-pointer" htmlFor={`opt_${preg.id_pregunta}_${idx}`}>
+                                        {op.opcion}
+                                    </label>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                ))}
+
+                {/* Botonera de Navegación */}
+                <div className="d-flex justify-content-end mt-4">
+                    {/* Botón Siguiente o Finalizar */}
+                    <button 
+                        className={`btn btn-lg ${indiceSeccionActual === secciones.length - 1 ? 'btn-success' : 'btn-tec'}`}
+                        onClick={handleSiguiente}
+                        disabled={!validarAvance()} // Bloqueado hasta contestar todo
+                    >
+                        {indiceSeccionActual === secciones.length - 1 ? 'Finalizar' : 'Siguiente'}
+                    </button>
+                </div>
+
+                {!validarAvance() && (
+                    <div className="text-end mt-2 text-danger small">
+                        * Conteste todas las preguntas para avanzar
+                    </div>
+                )}
+            </div>
+        </div>
+
+      </div>
+    </div>
+  );
+};
+
+export default CuestionarioPage;
