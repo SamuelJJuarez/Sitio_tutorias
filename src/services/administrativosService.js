@@ -1,4 +1,13 @@
-const API_URL = 'http://localhost:3000/api/administrativos'; // Verifica si la ruta en tu API es 'administrativo' o 'administrativos'
+const API_URL = 'http://localhost:3000/api/administrativos';
+
+// Función auxiliar para obtener headers con auth
+const getAuthHeaders = () => {
+  const token = localStorage.getItem('token');
+  return {
+    'Content-Type': 'application/json',
+    ...(token && { 'Authorization': `Bearer ${token}` })
+  };
+};
 
 export const administrativosService = {
   register: async (adminData) => {
@@ -6,6 +15,41 @@ export const administrativosService = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(adminData),
+    });
+    return await response.json();
+  },
+
+  getFiltros: async () => {
+    const response = await fetch(`${API_URL}/filtros`, {
+      method: 'GET',
+      headers: getAuthHeaders(),
+    });
+    return await response.json();
+  },
+
+  getGrupos: async (carrera, periodo) => {
+    const params = new URLSearchParams({ carrera, periodo });
+    const response = await fetch(`${API_URL}/grupos?${params.toString()}`, {
+      method: 'GET',
+      headers: getAuthHeaders(),
+    });
+    return await response.json();
+  },
+
+  getResultadosGenerales: async (carrera, periodo) => {
+    const params = new URLSearchParams({ carrera, periodo });
+    const response = await fetch(`${API_URL}/resultados/generales?${params.toString()}`, {
+      method: 'GET',
+      headers: getAuthHeaders(),
+    });
+    return await response.json();
+  },
+
+  getResultadosPorGrupo: async (carrera, periodo, indice_grupo) => {
+    const params = new URLSearchParams({ carrera, periodo, indice_grupo });
+    const response = await fetch(`${API_URL}/resultados/grupo?${params.toString()}`, {
+      method: 'GET',
+      headers: getAuthHeaders(),
     });
     return await response.json();
   }

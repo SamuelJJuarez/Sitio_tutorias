@@ -18,8 +18,10 @@ import DashboardMaestro from './pages/maestro/DashboardMaestro';
 import ListaAlumnosPage from './pages/maestro/ListaAlumnosPage';
 import ResultadosAlumnoVista from './pages/maestro/ResultadosAlumnoVista';
 
-// --- COMPONENTES TEMPORALES (Pronto haremos los archivos reales) ---
-const DashboardAdmin = () => <div className="p-5"><h2>Panel Administrativo (En construcción)</h2></div>;
+// --- VISTAS ADMIN ---
+import DashboardAdmin from './pages/admin/DashboardAdmin';
+import ResultadosGeneralesAdmin from './pages/admin/ResultadosGeneralesAdmin';
+import ResultadosGruposAdmin from './pages/admin/ResultadosGruposAdmin';
 
 // --- COMPONENTE DE RUTA PROTEGIDA ---
 const ProtectedRoute = ({ children, allowedRoles }) => {
@@ -107,7 +109,8 @@ function App() {
                 <MainLayout>
                   <Routes>
                     <Route path="dashboard" element={<DashboardAdmin />} />
-                    {/* Aquí agregaremos más rutas de admin en el futuro */}
+                    <Route path="resultados/generales" element={<ResultadosGeneralesAdmin />} />
+                    <Route path="resultados/grupos" element={<ResultadosGruposAdmin />} />
                     <Route path="*" element={<Navigate to="dashboard" />} />
                   </Routes>
                 </MainLayout>

@@ -5,6 +5,8 @@ import { useAuth } from '../../context/AuthContext';
 import { cuestionarioService } from '../../services/cuestionarioService';
 // Íconos nuevos
 import { FaClipboardList, FaChartBar } from 'react-icons/fa';
+import InstruccionesModal from '../../components/modals/InstruccionesModal';
+import IncompletoModal from '../../components/modals/IncompletoModal';
 
 const DashboardAlumno = () => {
   const { user } = useAuth();
@@ -85,33 +87,17 @@ const DashboardAlumno = () => {
         </div>
       </div>
 
-      {/* --- MODALES (Igual que antes) --- */}
-      <Modal show={showInstrucciones} onHide={() => setShowInstrucciones(false)} centered backdrop="static">
-        <Modal.Header closeButton>
-          <Modal.Title className="fw-bold text-tec">Cuestionario</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <h5 className="fw-bold">Instrucciones:</h5>
-          <p>Conteste cada pregunta seleccionando la respuesta que considere más adecuada.</p>
-        </Modal.Body>
-        <Modal.Footer>
-          <button className="btn btn-secondary" onClick={() => setShowInstrucciones(false)}>Cancelar</button>
-          <button className="btn btn-tec" onClick={handleStartExamen}>Comenzar</button>
-        </Modal.Footer>
-      </Modal>
+      {/* --- MODALES --- */}
+      <InstruccionesModal 
+        show={showInstrucciones} 
+        onHide={() => setShowInstrucciones(false)} 
+        onStart={handleStartExamen} 
+      />
 
-      <Modal show={showIncompleto} onHide={() => setShowIncompleto(false)} centered>
-        <Modal.Header className="bg-warning text-dark border-0">
-          <Modal.Title className="fw-bold"><i className="bi bi-exclamation-triangle-fill me-2"></i>Atención</Modal.Title>
-        </Modal.Header>
-        <Modal.Body className="text-center py-4">
-          <h5 className="mb-3">Cuestionario Incompleto</h5>
-          <p>Debes completar todo el cuestionario antes de poder ver tus resultados.</p>
-        </Modal.Body>
-        <Modal.Footer className="border-0">
-          <button className="btn btn-primary" onClick={() => setShowIncompleto(false)}>Aceptar</button>
-        </Modal.Footer>
-      </Modal>
+      <IncompletoModal 
+        show={showIncompleto} 
+        onHide={() => setShowIncompleto(false)} 
+      />
     </div>
   );
 };

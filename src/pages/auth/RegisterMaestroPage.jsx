@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { maestrosService } from '../../services/maestrosService';
+import SuccessModal from '../../components/modals/SuccessModal';
 
 const RegisterMaestroPage = () => {
   const navigate = useNavigate();
+  const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
     num_control_prof: '',
     nombre: '',
@@ -20,8 +22,10 @@ const RegisterMaestroPage = () => {
     try {
       const res = await maestrosService.register(formData);
       if (res.success) {
-        alert('Profesor registrado correctamente');
-        navigate('/');
+        setShowModal(true);
+        setTimeout(() => {
+          navigate('/');
+        }, 2000);
       } else {
         alert('Error: ' + res.message);
       }
@@ -71,6 +75,7 @@ const RegisterMaestroPage = () => {
           </div>
         </div>
       </div>
+      <SuccessModal isOpen={showModal} message="Usuario registrado correctamente" />
     </div>
   );
 };

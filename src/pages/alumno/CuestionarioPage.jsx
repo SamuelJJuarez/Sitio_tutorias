@@ -63,10 +63,10 @@ const CuestionarioPage = () => {
   }, [indiceSeccionActual, secciones]);
 
   // Manejar selección de opción
-  const handleOptionSelect = (idPregunta, indexOpcion) => {
+  const handleOptionSelect = (idPregunta, idOpcion) => {
     setRespuestasUsuario(prev => ({
         ...prev,
-        [idPregunta]: indexOpcion
+        [idPregunta]: idOpcion
     }));
   };
 
@@ -82,13 +82,15 @@ const CuestionarioPage = () => {
     if (!validarAvance()) return;
 
     try {
-        // Convertimos el objeto de respuestas a un array de índices solo values
-        const indices = Object.values(respuestasUsuario);
+        // Convertimos el objeto de respuestas a un array de detalle
+        const respuestasDetalle = Object.entries(respuestasUsuario).map(([id_pregunta, id_opcion]) => ({
+            id_pregunta: parseInt(id_pregunta),
+            id_opcion: parseInt(id_opcion)
+        }));
 
         await cuestionarioService.saveSeccion({
             id_seccion: secciones[indiceSeccionActual].id_seccion,
-            respuestasIndices: indices,
-            totalOpciones: opciones.length
+            respuestasDetalle
         });
 
         // Avanzar
@@ -139,17 +141,17 @@ const CuestionarioPage = () => {
                         <h5 className="fw-bold mb-3">{index + 1}. {preg.pregunta}</h5>
                         
                         <div className="d-flex flex-column gap-2">
-                            {opciones.map((op, idx) => (
+                            {preg.opciones && preg.opciones.map((op) => (
                                 <div key={op.id_opcion} className="form-check p-2 rounded hover-bg-light">
                                     <input 
                                         className="form-check-input" 
                                         type="radio" 
                                         name={`preg_${preg.id_pregunta}`} 
-                                        id={`opt_${preg.id_pregunta}_${idx}`}
-                                        onChange={() => handleOptionSelect(preg.id_pregunta, idx)}
-                                        checked={respuestasUsuario[preg.id_pregunta] === idx}
+                                        id={`opt_${op.id_opcion}`}
+                                        onChange={() => handleOptionSelect(preg.id_pregunta, op.id_opcion)}
+                                        checked={respuestasUsuario[preg.id_pregunta] === op.id_opcion}
                                     />
-                                    <label className="form-check-label w-100 cursor-pointer" htmlFor={`opt_${preg.id_pregunta}_${idx}`}>
+                                    <label className="form-check-label w-100 cursor-pointer" htmlFor={`opt_${op.id_opcion}`}>
                                         {op.opcion}
                                     </label>
                                 </div>

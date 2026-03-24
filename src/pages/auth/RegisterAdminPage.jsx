@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { administrativosService } from '../../services/administrativosService';
+import SuccessModal from '../../components/modals/SuccessModal';
 
 const RegisterAdminPage = () => {
   const navigate = useNavigate();
+  const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
     identificador_admin: '', // En el PDF dice "Número de control", pero en BD es identificador_admin
     nombre: '',
@@ -20,8 +22,10 @@ const RegisterAdminPage = () => {
     try {
       const res = await administrativosService.register(formData);
       if (res.success) {
-        alert('Administrativo registrado correctamente');
-        navigate('/');
+        setShowModal(true);
+        setTimeout(() => {
+          navigate('/');
+        }, 2000);
       } else {
         alert('Error: ' + res.message);
       }
@@ -71,6 +75,7 @@ const RegisterAdminPage = () => {
           </div>
         </div>
       </div>
+      <SuccessModal isOpen={showModal} message="Usuario registrado correctamente" />
     </div>
   );
 };

@@ -2,9 +2,11 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { alumnosService } from '../../services/alumnosService';
 import { gruposService } from '../../services/gruposService';
+import SuccessModal from '../../components/modals/SuccessModal';
 
 const RegisterAlumnoPage = () => {
   const navigate = useNavigate();
+  const [showModal, setShowModal] = useState(false);
   const [grupos, setGrupos] = useState([]);
   
   // Estado para el formulario
@@ -52,8 +54,10 @@ const RegisterAlumnoPage = () => {
     try {
       const res = await alumnosService.register(formData);
       if (res.success) {
-        alert('Alumno registrado correctamente');
-        navigate('/'); // Redirigir al login
+        setShowModal(true);
+        setTimeout(() => {
+          navigate('/'); // Redirigir al login
+        }, 2000);
       } else {
         alert('Error: ' + res.message);
       }
@@ -149,6 +153,7 @@ const RegisterAlumnoPage = () => {
           </div>
         </div>
       </div>
+      <SuccessModal isOpen={showModal} message="Usuario registrado correctamente" />
     </div>
   );
 };

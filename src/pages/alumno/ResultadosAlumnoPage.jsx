@@ -3,13 +3,27 @@ import { useNavigate } from 'react-router-dom';
 import { cuestionarioService } from '../../services/cuestionarioService';
 import logo from '../../assets/itl_leon.png';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
+import DetalleRespuestasModal from '../../components/modals/DetalleRespuestasModal';
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d'];
-
 const ResultadosAlumnoPage = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [resultados, setResultados] = useState([]);
+  const [modalData, setModalData] = useState(null);
+
+  const getChartData = (respuestas) => {
+    const counts = {};
+    respuestas.forEach(r => {
+      if (r.respuesta_elegida && r.respuesta_elegida !== "Sin responder") {
+        counts[r.respuesta_elegida] = (counts[r.respuesta_elegida] || 0) + 1;
+      }
+    });
+    return Object.keys(counts).map(key => ({
+      name: key,
+      cantidad: counts[key]
+    }));
+  };
 
   useEffect(() => {
     const fetchResultados = async () => {
@@ -61,29 +75,46 @@ const ResultadosAlumnoPage = () => {
                 )}
 
                 <div className="row g-4">
-                    {resultados.map((seccion) => (
-                        <div key={seccion.id_seccion} className="col-12 mb-5">
-                            <h5 className="fw-bold text-dark border-start border-5 border-primary ps-3 mb-3">
-                                {seccion.nombre}
-                            </h5>
-                            {/* Caja de gráfica blanca limpia */}
-                            <div className="bg-white p-3 rounded border shadow-sm" style={{ height: 350 }}>
-                                <ResponsiveContainer>
-                                    <BarChart data={seccion.datos} margin={{ top: 20, right: 30, left: 20, bottom: 50 }}>
-                                        <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                                        <XAxis dataKey="name" tick={{fontSize: 11}} interval={0} angle={-15} textAnchor="end" />
-                                        <YAxis allowDecimals={false} />
-                                        <Tooltip cursor={{fill: '#f0f0f0'}} />
-                                        <Bar dataKey="cantidad" name="Respuestas" radius={[4, 4, 0, 0]}>
-                                            {seccion.datos.map((entry, index) => (
-                                                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                                            ))}
-                                        </Bar>
-                                    </BarChart>
-                                </ResponsiveContainer>
+                    {resultados.map((seccion) => {
+                        const showChart = seccion.id_seccion !== 2 && seccion.id_seccion !== 3;
+                        const chartData = showChart ? getChartData(seccion.respuestas || []) : [];
+
+                        return (
+                            <div key={seccion.id_seccion} className="col-12 mb-5">
+                                <h5 className="fw-bold text-dark border-start border-5 border-primary ps-3 mb-3">
+                                    {seccion.nombre}
+                                </h5>
+                                
+                                {showChart && (
+                                    <div className="bg-white p-3 rounded border shadow-sm mb-3" style={{ height: 350 }}>
+                                        <ResponsiveContainer>
+                                            <BarChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 50 }}>
+                                                <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                                                <XAxis dataKey="name" tick={{fontSize: 11}} interval={0} angle={-15} textAnchor="end" />
+                                                <YAxis allowDecimals={false} />
+                                                <Tooltip cursor={{fill: '#f0f0f0'}} />
+                                                <Bar dataKey="cantidad" name="Respuestas" radius={[4, 4, 0, 0]}>
+                                                    {chartData.map((entry, index) => (
+                                                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                                    ))}
+                                                </Bar>
+                                            </BarChart>
+                                        </ResponsiveContainer>
+                                    </div>
+                                )}
+                                
+                                <div>
+                                    <button 
+                                        className="btn btn-outline-primary shadow-sm"
+                                        onClick={() => setModalData(seccion)}
+                                    >
+                                        <i className="bi bi-eye-fill me-2"></i>
+                                        Ver detalles
+                                    </button>
+                                </div>
                             </div>
-                        </div>
-                    ))}
+                        );
+                    })}
                 </div>
 
                 <div className="text-center mt-5">
@@ -93,6 +124,11 @@ const ResultadosAlumnoPage = () => {
                 </div>
             </div>
         </div>
+
+        <DetalleRespuestasModal 
+            modalData={modalData} 
+            onClose={() => setModalData(null)} 
+        />
 
       </div>
     </div>

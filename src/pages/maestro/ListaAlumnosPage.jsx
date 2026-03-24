@@ -3,6 +3,7 @@ import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import { Modal, Accordion } from 'react-bootstrap';
 import { maestrosService } from '../../services/maestrosService';
 import { FaSearch, FaChevronLeft, FaChevronRight, FaCalendarAlt, FaEdit } from 'react-icons/fa';
+import EntrevistaModal from '../../components/modals/EntrevistaModal';
 
 const ITEMS_POR_PAGINA = 10;
 
@@ -213,46 +214,14 @@ const ListaAlumnosPage = () => {
         </div>
 
         {/* MODAL UNIVERSAL (Crear / Editar / Reprogramar) */}
-        <Modal show={showModal} onHide={() => setShowModal(false)} centered>
-            <Modal.Header closeButton className="bg-primary text-white">
-                <Modal.Title>
-                    {modoModal === 'crear' && 'Programar Entrevista'}
-                    {modoModal === 'editar_resumen' && 'Editar Resumen'}
-                    {modoModal === 'reprogramar' && 'Reprogramar Entrevista'}
-                </Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                {/* Campos para Crear y Reprogramar */}
-                {(modoModal === 'crear' || modoModal === 'reprogramar') && (
-                    <>
-                        <div className="mb-3">
-                            <label className="form-label fw-bold">Fecha</label>
-                            <input type="date" className="form-control" value={formData.fecha} onChange={(e) => setFormData({...formData, fecha: e.target.value})} />
-                        </div>
-                        <div className="mb-3">
-                            <label className="form-label fw-bold">Hora</label>
-                            <input type="time" className="form-control" value={formData.hora} onChange={(e) => setFormData({...formData, hora: e.target.value})} />
-                        </div>
-                        <div className="mb-3">
-                            <label className="form-label fw-bold">Lugar</label>
-                            <input type="text" className="form-control" placeholder="Ej: Cubículo 4" value={formData.lugar} onChange={(e) => setFormData({...formData, lugar: e.target.value})} />
-                        </div>
-                    </>
-                )}
-
-                {/* Campo solo para Editar Resumen */}
-                {modoModal === 'editar_resumen' && (
-                    <div className="mb-3">
-                        <label className="form-label fw-bold">Resumen / Notas</label>
-                        <textarea className="form-control" rows="4" value={formData.resumen} onChange={(e) => setFormData({...formData, resumen: e.target.value})}></textarea>
-                    </div>
-                )}
-            </Modal.Body>
-            <Modal.Footer>
-                <button className="btn btn-secondary" onClick={() => setShowModal(false)}>Cancelar</button>
-                <button className="btn btn-primary" onClick={handleSubmit}>Guardar</button>
-            </Modal.Footer>
-        </Modal>
+        <EntrevistaModal 
+            show={showModal} 
+            onHide={() => setShowModal(false)} 
+            modo={modoModal}
+            formData={formData}
+            setFormData={setFormData}
+            onSave={handleSubmit}
+        />
 
       </div>
     </div>
