@@ -130,7 +130,7 @@ const RegisterAlumnoPage = () => {
                     <select name="estado_civil" className="form-select" onChange={handleChange}>
                       <option value="Soltero">Soltero/a</option>
                       <option value="Casado">Casado/a</option>
-                      <option value="ULibre">Unión Libre</option>
+                      <option value="Unión Libre">Unión Libre</option>
                       <option value="Divorciado">Divorciado/a</option>
                       <option value="Viudo">Viudo/a</option>
                     </select>
