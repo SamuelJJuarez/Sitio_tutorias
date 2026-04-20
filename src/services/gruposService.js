@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:3000/api/grupos';
+const API_URL = 'https://api-sitio-tutorias.vercel.app/api/grupos';
 
 export const gruposService = {
   getByCarrera: async (carrera) => {

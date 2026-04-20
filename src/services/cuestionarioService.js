@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:3000/api/cuestionario';
+const API_URL = 'https://api-sitio-tutorias.vercel.app/api/cuestionario';
 
 // Helper para obtener el token del almacenamiento local
 const getAuthHeaders = () => {

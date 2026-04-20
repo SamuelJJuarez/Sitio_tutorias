@@ -1,5 +1,5 @@
-const API_URL = 'http://localhost:3000/api/maestros';
-const CUESTIONARIO_URL = 'http://localhost:3000/api/cuestionario';
+const API_URL = 'https://api-sitio-tutorias.vercel.app/api/maestros';
+const CUESTIONARIO_URL = 'https://api-sitio-tutorias.vercel.app/api/cuestionario';
 
 const getAuthHeaders = () => {
   const token = localStorage.getItem('token');
@@ -29,26 +29,26 @@ export const maestrosService = {
     return await res.json();
   },
   createEntrevista: async (data) => {
-    const res = await fetch(`${API_URL}/entrevista`, { 
-        method: 'POST', headers: getAuthHeaders(), body: JSON.stringify(data) 
+    const res = await fetch(`${API_URL}/entrevista`, {
+      method: 'POST', headers: getAuthHeaders(), body: JSON.stringify(data)
     });
     return await res.json();
   },
   updateResumen: async (data) => {
-    const res = await fetch(`${API_URL}/entrevista/resumen`, { 
-        method: 'PUT', headers: getAuthHeaders(), body: JSON.stringify(data) 
+    const res = await fetch(`${API_URL}/entrevista/resumen`, {
+      method: 'PUT', headers: getAuthHeaders(), body: JSON.stringify(data)
     });
     return await res.json();
   },
   reprogramar: async (data) => {
-    const res = await fetch(`${API_URL}/entrevista/reprogramar`, { 
-        method: 'PUT', headers: getAuthHeaders(), body: JSON.stringify(data) 
+    const res = await fetch(`${API_URL}/entrevista/reprogramar`, {
+      method: 'PUT', headers: getAuthHeaders(), body: JSON.stringify(data)
     });
     return await res.json();
   },
   deleteEntrevista: async (id_entrevista) => {
     const res = await fetch(`${API_URL}/entrevista/${id_entrevista}`, {
-        method: 'DELETE', headers: getAuthHeaders()
+      method: 'DELETE', headers: getAuthHeaders()
     });
     return await res.json();
   },

@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:3000/api/administrativos';
+const API_URL = 'https://api-sitio-tutorias.vercel.app/api/administrativos';
 
 // Función auxiliar para obtener headers con auth
 const getAuthHeaders = () => {
