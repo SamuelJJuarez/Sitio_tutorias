@@ -8,12 +8,12 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [role, setRole] = useState(null); 
+  const [role, setRole] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  // URL base de tu API
-  const API_URL = 'http://localhost:3000/api'; 
+  // URL base de la API
+  const API_URL = 'http://localhost:3000/api';
 
   // Efecto para verificar si ya hay sesión al recargar la página
   useEffect(() => {
@@ -32,8 +32,8 @@ export const AuthProvider = ({ children }) => {
   const login = async (correo, contraseña, tipoUsuario) => {
     try {
       let endpoint = '';
-      
-      // Selección del endpoint según el tipo de usuario (basado en tus rutas de Express)
+
+      // Selección del endpoint según el tipo de usuario
       switch (tipoUsuario) {
         case 'alumno':
           endpoint = '/alumnos/login'; //
@@ -55,8 +55,8 @@ export const AuthProvider = ({ children }) => {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          correo,      // Tu API espera 'correo'
-          contraseña   // Tu API espera 'contraseña'
+          correo,
+          contraseña
         })
       });
 
@@ -78,17 +78,17 @@ export const AuthProvider = ({ children }) => {
         return { success: true };
       } else {
         // Si la API responde con error (ej. 401 o 400)
-        return { 
-          success: false, 
-          message: data.message || 'Credenciales incorrectas' 
+        return {
+          success: false,
+          message: data.message || 'Credenciales incorrectas'
         };
       }
 
     } catch (error) {
       console.error("Login error:", error);
-      return { 
-        success: false, 
-        message: 'Error al conectar con el servidor' 
+      return {
+        success: false,
+        message: 'Error al conectar con el servidor'
       };
     }
   };

@@ -6,10 +6,6 @@ const MainLayout = ({ children }) => {
       {/* Header siempre arriba */}
       <Header />
 
-      {/* CORRECCIÓN: Eliminamos la clase 'container', 'bg-white' y los paddings.
-          Ahora 'children' ocupa todo el ancho y alto disponible, permitiendo
-          que cada página decida su propio color de fondo.
-      */}
       <main className="flex-grow-1">
         {children}
       </main>

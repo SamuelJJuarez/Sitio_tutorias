@@ -23,13 +23,12 @@ const SuccessModal = ({ isOpen, message }) => {
         textAlign: 'center',
         boxShadow: '0px 8px 24px rgba(0, 0, 0, 0.15)',
         minWidth: '350px',
-        border: '1px solid #ddd' // Slightly bordered as in image
+        border: '1px solid #ddd'
       }}>
-        {/* Green Circle with White checkmark */}
         <div style={{
           width: '70px',
           height: '70px',
-          backgroundColor: '#00d632', // Vibrant green similar to the image
+          backgroundColor: '#00d632',
           borderRadius: '50%',
           display: 'flex',
           justifyContent: 'center',
@@ -40,12 +39,12 @@ const SuccessModal = ({ isOpen, message }) => {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={4} d="M5 13l4 4L19 7" />
           </svg>
         </div>
-        
-        <h5 style={{ 
-          margin: 0, 
-          color: '#444', 
+
+        <h5 style={{
+          margin: 0,
+          color: '#444',
           fontWeight: '600',
-          fontSize: '1.1rem' 
+          fontSize: '1.1rem'
         }}>
           {message}
         </h5>

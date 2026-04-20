@@ -46,6 +46,12 @@ export const maestrosService = {
     });
     return await res.json();
   },
+  deleteEntrevista: async (id_entrevista) => {
+    const res = await fetch(`${API_URL}/entrevista/${id_entrevista}`, {
+        method: 'DELETE', headers: getAuthHeaders()
+    });
+    return await res.json();
+  },
   // Obtener resultados de alumno especifico
   getResultadosAlumno: async (numControl) => {
     const res = await fetch(`${CUESTIONARIO_URL}/resultados/${numControl}`, { headers: getAuthHeaders() });

@@ -5,12 +5,11 @@ const getAuthHeaders = () => {
   const token = localStorage.getItem('token');
   return {
     'Content-Type': 'application/json',
-    'Authorization': `Bearer ${token}` // <--- Cabecera clave
+    'Authorization': `Bearer ${token}`
   };
 };
 
 export const cuestionarioService = {
-  // Ya no necesitamos recibir el numControl como argumento, la API sabe quién eres por el token
   getEstatus: async () => {
     const response = await fetch(`${API_URL}/estatus`, {
       method: 'GET',
@@ -28,11 +27,10 @@ export const cuestionarioService = {
   },
 
   saveSeccion: async (data) => {
-    // data ya no necesita llevar num_control_alum, solo id_seccion y respuestas
     const response = await fetch(`${API_URL}/guardar`, {
-        method: 'POST',
-        headers: getAuthHeaders(),
-        body: JSON.stringify(data)
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(data)
     });
     return await response.json();
   },

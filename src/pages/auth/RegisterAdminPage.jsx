@@ -74,7 +74,7 @@ const RegisterAdminPage = () => {
   };
 
   return (
-    <div className="container py-5">
+    <div className="bg-tec-full">
       <div className="row justify-content-center">
         <div className="col-md-6">
           <div className="card shadow border-0">

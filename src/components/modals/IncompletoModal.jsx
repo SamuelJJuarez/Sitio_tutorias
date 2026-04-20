@@ -8,7 +8,7 @@ const IncompletoModal = ({ show, onHide }) => {
         <Modal.Title className="fw-bold"><i className="bi bi-exclamation-triangle-fill me-2"></i>Atención</Modal.Title>
       </Modal.Header>
       <Modal.Body className="text-center py-4">
-        <h5 className="mb-3">Cuestionario Incompleto</h5>
+        <h5 className="mb-3">Cuestionario incompleto</h5>
         <p>Debes completar todo el cuestionario antes de poder ver tus resultados.</p>
       </Modal.Body>
       <Modal.Footer className="border-0">

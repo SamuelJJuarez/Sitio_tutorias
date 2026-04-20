@@ -108,7 +108,7 @@ const RegisterAlumnoPage = () => {
   };
 
   return (
-    <div className="container py-5">
+    <div className="bg-tec-full">
       <div className="row justify-content-center">
         <div className="col-md-8">
           <div className="card shadow-lg border-0">
@@ -178,7 +178,18 @@ const RegisterAlumnoPage = () => {
                   {/* Fila 4 */}
                   <div className="col-md-6">
                     <label className="form-label">Semestre</label>
-                    <input type="number" name="semestre" className={`form-control ${formData.semestre.length > 0 && formData.semestre.trim().length < 1 ? 'is-invalid' : ''}`} onChange={handleChange} required maxLength={2} />
+                    <input
+                      type="number"
+                      name="semestre"
+                      className={`form-control ${formData.semestre.length > 0 && formData.semestre.trim().length < 1 ? 'is-invalid' : ''}`}
+                      onChange={handleChange}
+                      onInput={(e) => {
+                        if (e.target.value.length > 2) {
+                          e.target.value = e.target.value.slice(0, 2);
+                        }
+                      }}
+                      required
+                    />
                     <div className="invalid-feedback">
                       El semestre debe tener al menos 1 caracter
                     </div>
@@ -190,7 +201,7 @@ const RegisterAlumnoPage = () => {
                       {grupos.map((g) => (
                         // Asumiendo que tu API devuelve indice_grupo y letra_grupo
                         <option key={g.indice_grupo} value={g.indice_grupo}>
-                          {g.indice_grupo} - {g.letra_grupo} ({g.periodo})
+                          {g.letra_grupo} ({g.periodo})
                         </option>
                       ))}
                     </select>
