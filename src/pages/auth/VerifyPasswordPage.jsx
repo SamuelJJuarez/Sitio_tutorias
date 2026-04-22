@@ -15,7 +15,7 @@ const VerifyPasswordPage = () => {
 
     const verifyToken = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/password/verify`, {
+        const response = await fetch(`https://api-sitio-tutorias.vercel.app/api/password/verify`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'

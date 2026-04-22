@@ -114,7 +114,7 @@ const RegisterAlumnoPage = () => {
           }
 
           try {
-            const statusRes = await fetch(`${import.meta.env.VITE_API_URL}/api/verificacion/status/${registroId}`);
+            const statusRes = await fetch(`https://api-sitio-tutorias.vercel.app/api/verificacion/status/${registroId}`);
             const statusData = await statusRes.json();
             
             if (statusData.success && statusData.status === 'verified') {
