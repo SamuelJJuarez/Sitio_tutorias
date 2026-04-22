@@ -3,10 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import { alumnosService } from '../../services/alumnosService';
 import { gruposService } from '../../services/gruposService';
 import SuccessModal from '../../components/modals/SuccessModal';
+import EmailVerificationModal from '../../components/modals/EmailVerificationModal';
 
 const RegisterAlumnoPage = () => {
   const navigate = useNavigate();
-  const [showModal, setShowModal] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [showEmailModal, setShowEmailModal] = useState(false);
   const [grupos, setGrupos] = useState([]);
 
   // Estado para el formulario
@@ -93,17 +95,51 @@ const RegisterAlumnoPage = () => {
     }
 
     try {
-      const res = await alumnosService.register(formData);
-      if (res.success) {
-        setShowModal(true);
+      const dataToSend = { ...formData, frontendUrl: window.location.origin };
+      const res = await alumnosService.register(dataToSend);
+      if (res.success && res.status === 'pending') {
+        setShowEmailModal(true);
+        const { registroId } = res;
+        
+        let attempts = 0;
+        const maxAttempts = 300; // 10 minutes (300 * 2s = 600s)
+        
+        const pollInterval = setInterval(async () => {
+          attempts++;
+          if (attempts > maxAttempts) {
+            clearInterval(pollInterval);
+            setShowEmailModal(false);
+            alert('Tiempo de espera agotado. Intente registrarse de nuevo.');
+            return;
+          }
+
+          try {
+            const statusRes = await fetch(`${import.meta.env.VITE_API_URL}/api/verificacion/status/${registroId}`);
+            const statusData = await statusRes.json();
+            
+            if (statusData.success && statusData.status === 'verified') {
+              clearInterval(pollInterval);
+              setShowEmailModal(false);
+              setShowSuccessModal(true);
+              setTimeout(() => {
+                navigate('/');
+              }, 2000);
+            }
+          } catch (e) {
+            console.error('Error polling status');
+          }
+        }, 2000);
+      } else if (res.success) {
+        // Fallback in case old logic is hit somehow
+        setShowSuccessModal(true);
         setTimeout(() => {
-          navigate('/'); // Redirigir al login
+          navigate('/');
         }, 2000);
       } else {
         alert('Error: ' + res.message);
       }
     } catch (error) {
-      alert('Error de conexión');
+      alert('Error de conexión al enviar el correo');
     }
   };
 
@@ -233,7 +269,8 @@ const RegisterAlumnoPage = () => {
           </div>
         </div>
       </div>
-      <SuccessModal isOpen={showModal} message="Usuario registrado correctamente" />
+      <SuccessModal isOpen={showSuccessModal} message="Usuario registrado correctamente" />
+      <EmailVerificationModal isOpen={showEmailModal} />
     </div>
   );
 };
