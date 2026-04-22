@@ -66,10 +66,10 @@ const RegisterMaestroPage = () => {
       if (res.success && res.status === 'pending') {
         setShowEmailModal(true);
         const { registroId } = res;
-        
+
         let attempts = 0;
         const maxAttempts = 300;
-        
+
         const pollInterval = setInterval(async () => {
           attempts++;
           if (attempts > maxAttempts) {
@@ -82,7 +82,7 @@ const RegisterMaestroPage = () => {
           try {
             const statusRes = await fetch(`https://api-sitio-tutorias.vercel.app/api/verificacion/status/${registroId}`);
             const statusData = await statusRes.json();
-            
+
             if (statusData.success && statusData.status === 'verified') {
               clearInterval(pollInterval);
               setShowEmailModal(false);
@@ -114,7 +114,7 @@ const RegisterMaestroPage = () => {
         <div className="col-md-6">
           <div className="card shadow border-0">
             <div className="card-body p-5">
-              <h2 className="text-center mb-4 text-tec fw-bold">Registrar Profesor</h2>
+              <h2 className="text-center mb-4 text-tec fw-bold">Registrar profesor</h2>
               <form onSubmit={handleSubmit} className="row g-3">
                 <div className="col-12">
                   <label>Número de control</label>

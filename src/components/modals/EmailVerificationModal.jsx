@@ -11,7 +11,7 @@ const EmailVerificationModal = ({ isOpen }) => {
             <div className="spinner-border text-primary mb-4" role="status" style={{ width: '3rem', height: '3rem' }}>
               <span className="visually-hidden">Cargando...</span>
             </div>
-            <h4 className="mb-3">Verificando Correo</h4>
+            <h4 className="mb-3">Verificando correo</h4>
             <p className="text-muted mb-0">Se ha enviado un correo electrónico para verificar su registro.</p>
             <p className="text-muted small mt-2">Por favor, revise su bandeja de entrada y siga las instrucciones. Tiene 10 minutos para confirmar.</p>
           </div>

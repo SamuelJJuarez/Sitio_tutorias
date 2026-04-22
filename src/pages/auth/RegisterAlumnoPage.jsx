@@ -100,10 +100,10 @@ const RegisterAlumnoPage = () => {
       if (res.success && res.status === 'pending') {
         setShowEmailModal(true);
         const { registroId } = res;
-        
+
         let attempts = 0;
-        const maxAttempts = 300; // 10 minutes (300 * 2s = 600s)
-        
+        const maxAttempts = 300; // 10 minutos (300 * 2s = 600s)
+
         const pollInterval = setInterval(async () => {
           attempts++;
           if (attempts > maxAttempts) {
@@ -116,7 +116,7 @@ const RegisterAlumnoPage = () => {
           try {
             const statusRes = await fetch(`https://api-sitio-tutorias.vercel.app/api/verificacion/status/${registroId}`);
             const statusData = await statusRes.json();
-            
+
             if (statusData.success && statusData.status === 'verified') {
               clearInterval(pollInterval);
               setShowEmailModal(false);
@@ -130,7 +130,6 @@ const RegisterAlumnoPage = () => {
           }
         }, 2000);
       } else if (res.success) {
-        // Fallback in case old logic is hit somehow
         setShowSuccessModal(true);
         setTimeout(() => {
           navigate('/');
@@ -149,7 +148,7 @@ const RegisterAlumnoPage = () => {
         <div className="col-md-8">
           <div className="card shadow-lg border-0">
             <div className="card-body p-5">
-              <h2 className="text-center mb-4 text-tec fw-bold">Registrar Alumno</h2>
+              <h2 className="text-center mb-4 text-tec fw-bold">Registrar alumno</h2>
 
               <form onSubmit={handleSubmit}>
                 <div className="row g-3">

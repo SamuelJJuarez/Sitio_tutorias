@@ -9,7 +9,7 @@ const ForgotPasswordModal = ({ isOpen, onClose }) => {
     nueva_contrasena: '',
     confirmar_contrasena: ''
   });
-  
+
   const [showEmailModal, setShowEmailModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [error, setError] = useState('');
@@ -24,20 +24,20 @@ const ForgotPasswordModal = ({ isOpen, onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     // Validaciones
     if (formData.nueva_contrasena.length < 8 || formData.nueva_contrasena.length > 30) {
       setError('La contraseña debe tener entre 8 y 30 caracteres.');
       return;
     }
-    
+
     if (formData.nueva_contrasena !== formData.confirmar_contrasena) {
       setError('Las contraseñas no coinciden.');
       return;
     }
 
     setLoading(true);
-    
+
     try {
       const dataToSend = {
         correo: formData.correo,
@@ -51,16 +51,16 @@ const ForgotPasswordModal = ({ isOpen, onClose }) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(dataToSend)
       });
-      
+
       const data = await res.json();
-      
+
       if (data.success && data.status === 'pending') {
         setShowEmailModal(true);
         const { registroId } = data;
-        
+
         let attempts = 0;
         const maxAttempts = 300; // 10 minutes
-        
+
         const pollInterval = setInterval(async () => {
           attempts++;
           if (attempts > maxAttempts) {
@@ -74,7 +74,7 @@ const ForgotPasswordModal = ({ isOpen, onClose }) => {
           try {
             const statusRes = await fetch(`https://api-sitio-tutorias.vercel.app/api/verificacion/status/${registroId}`);
             const statusData = await statusRes.json();
-            
+
             if (statusData.success && statusData.status === 'verified') {
               clearInterval(pollInterval);
               setShowEmailModal(false);
@@ -105,7 +105,7 @@ const ForgotPasswordModal = ({ isOpen, onClose }) => {
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content border-0 shadow">
             <div className="modal-header border-0 pb-0">
-              <h5 className="modal-title text-tec fw-bold">Recuperar Contraseña</h5>
+              <h5 className="modal-title text-tec fw-bold">Recuperar contraseña</h5>
               <button type="button" className="btn-close" onClick={onClose} disabled={loading}></button>
             </div>
             <div className="modal-body p-4">
@@ -129,7 +129,7 @@ const ForgotPasswordModal = ({ isOpen, onClose }) => {
                 </div>
 
                 <div className="mb-3">
-                  <label className="form-label fw-bold text-secondary">Correo Institucional:</label>
+                  <label className="form-label fw-bold text-secondary">Correo institucional:</label>
                   <input
                     type="email"
                     name="correo"
@@ -143,7 +143,7 @@ const ForgotPasswordModal = ({ isOpen, onClose }) => {
                 </div>
 
                 <div className="mb-3">
-                  <label className="form-label fw-bold text-secondary">Nueva Contraseña:</label>
+                  <label className="form-label fw-bold text-secondary">Nueva contraseña:</label>
                   <input
                     type="password"
                     name="nueva_contrasena"
@@ -159,7 +159,7 @@ const ForgotPasswordModal = ({ isOpen, onClose }) => {
                 </div>
 
                 <div className="mb-3">
-                  <label className="form-label fw-bold text-secondary">Confirmar Nueva Contraseña:</label>
+                  <label className="form-label fw-bold text-secondary">Confirmar nueva contraseña:</label>
                   <input
                     type="password"
                     name="confirmar_contrasena"
@@ -193,7 +193,7 @@ const ForgotPasswordModal = ({ isOpen, onClose }) => {
           </div>
         </div>
       </div>
-      
+
       <EmailVerificationModal isOpen={showEmailModal} />
       <SuccessModal isOpen={showSuccessModal} message="Contraseña actualizada exitosamente" />
     </>

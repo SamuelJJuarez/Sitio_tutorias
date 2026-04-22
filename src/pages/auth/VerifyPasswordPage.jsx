@@ -55,7 +55,7 @@ const VerifyPasswordPage = () => {
               <div className="text-success mb-4">
                 <i className="bi bi-check-circle-fill" style={{ fontSize: '4rem' }}></i>
               </div>
-              <h4 className="mb-3">¡Contraseña Actualizada!</h4>
+              <h4 className="mb-3">¡Contraseña actualizada!</h4>
               <p className="text-muted">
                 Su contraseña ha sido actualizada, pulse <a href="#" onClick={(e) => { e.preventDefault(); navigate('/'); }} className="text-primary fw-bold text-decoration-none">aquí</a> para iniciar sesión.
               </p>
@@ -67,7 +67,7 @@ const VerifyPasswordPage = () => {
               <div className="text-danger mb-4">
                 <i className="bi bi-x-circle-fill" style={{ fontSize: '4rem' }}></i>
               </div>
-              <h4 className="mb-3">Error en la Verificación</h4>
+              <h4 className="mb-3">Error en la verificación</h4>
               <p className="text-muted">
                 Tiempo de espera agotado o enlace inválido. Intente solicitar el cambio de contraseña de nuevo.
               </p>
