@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom'; // <--- Importamos Link
 import { useAuth } from '../context/AuthContext';
 import logo from '../assets/itl_leon.png';
+import ForgotPasswordModal from '../components/modals/ForgotPasswordModal';
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({
@@ -15,6 +16,7 @@ const LoginPage = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [tipoUsuario, setTipoUsuario] = useState('alumno'); // Estado para los Radio Buttons del PDF
+  const [showForgotModal, setShowForgotModal] = useState(false);
 
   const { login, logout } = useAuth();
   const navigate = useNavigate();
@@ -105,6 +107,16 @@ const LoginPage = () => {
             </div>
           </div>
 
+          <div className="text-center mb-4">
+            <a 
+              href="#" 
+              onClick={(e) => { e.preventDefault(); setShowForgotModal(true); }}
+              className="text-primary text-decoration-none small fw-bold"
+            >
+              ¿Olvidó su contraseña?
+            </a>
+          </div>
+
           {error && (
             <div className="alert alert-danger text-center p-2 mb-3 small" role="alert">
               {error}
@@ -131,6 +143,7 @@ const LoginPage = () => {
         </div>
 
       </div>
+      <ForgotPasswordModal isOpen={showForgotModal} onClose={() => setShowForgotModal(false)} />
     </div>
   );
 };

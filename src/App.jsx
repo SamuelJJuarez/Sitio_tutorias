@@ -8,6 +8,7 @@ import RegisterAlumnoPage from './pages/auth/RegisterAlumnoPage';
 import RegisterMaestroPage from './pages/auth/RegisterMaestroPage';
 import RegisterAdminPage from './pages/auth/RegisterAdminPage';
 import VerifyEmailPage from './pages/auth/VerifyEmailPage';
+import VerifyPasswordPage from './pages/auth/VerifyPasswordPage';
 
 // --- VISTAS ALUMNO ---
 import DashboardAlumno from './pages/alumno/DashboardAlumno';
@@ -55,6 +56,7 @@ function App() {
           <Route path="/registro-maestro" element={<RegisterMaestroPage />} />
           <Route path="/registro-admin" element={<RegisterAdminPage />} />
           <Route path="/verificar-correo" element={<VerifyEmailPage />} />
+          <Route path="/verificar-password" element={<VerifyPasswordPage />} />
 
           {/* ==============================
               RUTAS PROTEGIDAS: ALUMNO
