@@ -24,6 +24,7 @@ import ResultadosAlumnoVista from './pages/maestro/ResultadosAlumnoVista';
 import DashboardAdmin from './pages/admin/DashboardAdmin';
 import ResultadosGeneralesAdmin from './pages/admin/ResultadosGeneralesAdmin';
 import ResultadosGruposAdmin from './pages/admin/ResultadosGruposAdmin';
+import CrearGruposAdmin from './pages/admin/CrearGruposAdmin';
 
 // --- COMPONENTE DE RUTA PROTEGIDA ---
 const ProtectedRoute = ({ children, allowedRoles }) => {
@@ -115,6 +116,7 @@ function App() {
                     <Route path="dashboard" element={<DashboardAdmin />} />
                     <Route path="resultados/generales" element={<ResultadosGeneralesAdmin />} />
                     <Route path="resultados/grupos" element={<ResultadosGruposAdmin />} />
+                    <Route path="crear-grupos" element={<CrearGruposAdmin />} />
                     <Route path="*" element={<Navigate to="dashboard" />} />
                   </Routes>
                 </MainLayout>

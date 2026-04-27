@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { FaClipboardList, FaChartLine } from 'react-icons/fa';
+import { FaClipboardList, FaChartLine, FaUsersCog } from 'react-icons/fa';
 
 const DashboardAdmin = () => {
   const { user } = useAuth();
@@ -14,9 +14,9 @@ const DashboardAdmin = () => {
         ¡Bienvenido, {user?.nombre || 'Administrador'}!
       </h2>
 
-      <div className="row g-5 justify-content-center w-100" style={{ maxWidth: '900px' }}>
+      <div className="row g-5 justify-content-center w-100" style={{ maxWidth: '1000px' }}>
         {/* Tarjeta Resumen General */}
-        <div className="col-md-5">
+        <div className="col-md-4">
           <div className="card shadow h-100 text-center p-4 card-custom cursor-pointer zoom-effect border-0"
             onClick={() => navigate('/admin/resultados/generales')}>
             <div className="card-body">
@@ -28,13 +28,25 @@ const DashboardAdmin = () => {
         </div>
 
         {/* Tarjeta Resultados por Grupo */}
-        <div className="col-md-5">
+        <div className="col-md-4">
           <div className="card shadow h-100 text-center p-4 card-custom cursor-pointer zoom-effect border-0"
             onClick={() => navigate('/admin/resultados/grupos')}>
             <div className="card-body">
               <FaChartLine className="display-1 text-info mb-3" size={80} />
               <h3 className="card-title fw-bold text-dark">Resultados por grupo</h3>
               <p className="card-text text-muted">Consulta el diagnóstico por grupos específicos</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Tarjeta Crear Grupos */}
+        <div className="col-md-4">
+          <div className="card shadow h-100 text-center p-4 card-custom cursor-pointer zoom-effect border-0"
+            onClick={() => navigate('/admin/crear-grupos')}>
+            <div className="card-body">
+              <FaUsersCog className="display-1 text-success mb-3" size={80} />
+              <h3 className="card-title fw-bold text-dark">Crear grupos</h3>
+              <p className="card-text text-muted">Genera y asigna nuevos grupos a los maestros</p>
             </div>
           </div>
         </div>

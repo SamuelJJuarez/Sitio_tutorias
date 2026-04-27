@@ -52,5 +52,22 @@ export const administrativosService = {
       headers: getAuthHeaders(),
     });
     return await response.json();
+  },
+
+  getMaestros: async () => {
+    const response = await fetch(`${API_URL}/maestros`, {
+      method: 'GET',
+      headers: getAuthHeaders(),
+    });
+    return await response.json();
+  },
+
+  bulkCreateGrupos: async (gruposData) => {
+    const response = await fetch(`${API_URL}/grupos/bulk`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(gruposData),
+    });
+    return await response.json();
   }
 };
